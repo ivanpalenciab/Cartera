@@ -9,7 +9,6 @@ import dash_mantine_components as dmc
 app = Dash(__name__, suppress_callback_exceptions=True,use_pages=True)
 
 app.layout = dmc.MantineProvider(dmc.Container([
-dcc.Store(id='shared-data', storage_type='memory'),
  dash.page_container
 ],fluid=True))
 
