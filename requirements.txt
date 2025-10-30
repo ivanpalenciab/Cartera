@@ -1,0 +1,7 @@
+dash==3.2.0
+python-dateutil
+seaborn==0.13.2
+matplotlib==3.10.3
+pandas==2.2.3
+openpyxl
+dash_mantine_components==2.0.0

@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: Aplicacion_finanzas
+    ports:
+      - "8050:8050"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python app.py

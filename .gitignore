@@ -1,0 +1,15 @@
+*.xlsx
+wireframe.drawio
+*.drawio
+*.bkp
+*.png
+*.jpg
+
+local.settings.py
+*.env
+.env.*
+
+/venv
+
+__pycache__/
+*.py[cod]
