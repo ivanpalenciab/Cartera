@@ -7,3 +7,4 @@ openpyxl
 dash_mantine_components==2.0.0
 polars==1.35.1
 fastexcel==0.16.0
+Babel

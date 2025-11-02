@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import dash_mantine_components as dmc
 
-#from datos.preparacion import datos
+import callbacks.callbacks
 
 app = Dash(__name__, suppress_callback_exceptions=True,use_pages=True)
 
