@@ -30,6 +30,8 @@ def grafico_linea_estado_resultados(ingresos_operacionales,costo_ventas,utilidad
     xaxis_title="Periodo",
     yaxis_title="Valor",
     title_x=0.5 , # Centra el título
+    plot_bgcolor="white",   # fondo del área de trazado
+    paper_bgcolor="white", 
 
     legend=dict(
         orientation="h",  # horizontal
@@ -81,5 +83,7 @@ def grafico_cascada(datos):
         title_x=0.5,
         xaxis_title="Periodo",
         yaxis_title="Partida",
+        plot_bgcolor="white",   # fondo del área de trazado
+        paper_bgcolor="white" 
 )
     return fig
