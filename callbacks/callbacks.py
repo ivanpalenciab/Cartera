@@ -1,11 +1,11 @@
 from dash import Input, Output, callback,State
 import polars as pl
-import plotly.graph_objects as go
 
 from datos.preparacion_finanzas import preparacion_datos_financieros
 from utils.funciones_ayuda import formatear_valor
 from utils.funciones_ayuda import obtencion_estado_resultados
 from graficos.estado_resultados import grafico_linea_estado_resultados, grafico_cascada
+from graficos.unidades_negocio import grafico_barras_ingresos_por_unidad_negocio,tabla_unidad_negocio
 
 @callback(
     Output("estado-resultados", "data"),
@@ -13,6 +13,8 @@ from graficos.estado_resultados import grafico_linea_estado_resultados, grafico_
     Output("seleccion-unidad-negocio","options"),
     Output("grafico-estado-resultados","figure"),
     Output("grafico-cascada-estado-resultados","figure"),
+    Output("grafico-ingresos-unidad-negocio","figure"),
+    Output("tabla-ingresos-unidad-negocio","data"),
     Input("seleccion-unidad-negocio","value"),
     Input("seleccion-centro-costos","value")
 )
@@ -45,4 +47,10 @@ def actualizar_datos(unidad_negocio,centro_costos):
         pl.col(c).map_elements(formatear_valor).alias(c)
     for c in datos_estado_resultado.columns if c != "Concepto de cuenta"])
 
-    return datos_estado_resultado.to_dicts(),centros_costos,unidades_negocio,figura,cascada
+    #aqui iniciamos a mostrar los datos correspondientes a los graficos de unidades de negocio
+
+    ingresos_unidad_negocio = grafico_barras_ingresos_por_unidad_negocio(datos)
+
+    datos_tabla_unidad_negocio = tabla_unidad_negocio(datos)
+
+    return datos_estado_resultado.to_dicts(),centros_costos,unidades_negocio,figura,cascada,ingresos_unidad_negocio,datos_tabla_unidad_negocio.to_dicts()

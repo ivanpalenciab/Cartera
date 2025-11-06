@@ -1,16 +1,14 @@
 import dash
 import dash_mantine_components as dmc
-from dash import Input, Output, callback
-from dash import dcc,dash_table, Input, Output, State,html
+from dash import dcc,dash_table,html
 import polars as pl
-import numpy as np
 import locale
 import locale
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 from datos.preparacion_finanzas import preparacion_datos_financieros
-from graficos.estado_resultados import grafico_estado_resultados,grafico_linea_estado_resultados
+from graficos.estado_resultados import grafico_estado_resultados
 from utils.funciones_ayuda import obtencion_estado_resultados
 
 datos_crudos = pl.read_excel("datos/Base_datos_finanzas.xlsx",sheet_id=0)
@@ -78,7 +76,27 @@ layout = dmc.MantineProvider(
                             dcc.Graph(id="grafico-cascada-estado-resultados", figure={}),
                             span=6  # Ocupa la otra mitad
                     )
-                ],  gutter="xs")    
+                ],  gutter="xs"),
+                dmc.Grid([
+                     
+                        dmc.GridCol(
+                            dash_table.DataTable(
+                                id="tabla-ingresos-unidad-negocio",
+                                data=[], 
+                                style_table={'overflowX': 'auto'},
+                                style_cell={
+                                    "textAlign": "center",
+                                    "fontSize": "9px",
+                                    "padding": "1px 2px",
+                                    "whiteSpace": "nowrap",  # no permite saltos, pero ocupa menos espaci
+                                },),
+                           
+                            span=6  # Ocupa la otra mitad
+                    ),dmc.GridCol(
+                        dcc.Graph(id="grafico-ingresos-unidad-negocio", figure={}),
+                        span=6  # Ocupa la mitad de la fila
+                        ),
+                ],  gutter="xs")     
                 ],
-            fluid=True,  # 👈 ESTA LÍNEA HACE QUE OCUPE TODO EL ANCHO
+            fluid=True, 
             style={"paddingLeft": "2%", "paddingRight": "2%"}) )
