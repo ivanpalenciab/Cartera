@@ -1,14 +1,18 @@
 from dash import Input, Output, callback,State
 import polars as pl
+import plotly.graph_objects as go
 
 from datos.preparacion_finanzas import preparacion_datos_financieros
 from utils.funciones_ayuda import formatear_valor
 from utils.funciones_ayuda import obtencion_estado_resultados
+from graficos.estado_resultados import grafico_linea_estado_resultados, grafico_cascada
 
 @callback(
     Output("estado-resultados", "data"),
     Output("seleccion-centro-costos","options"),
     Output("seleccion-unidad-negocio","options"),
+    Output("grafico-estado-resultados","figure"),
+    Output("grafico-cascada-estado-resultados","figure"),
     Input("seleccion-unidad-negocio","value"),
     Input("seleccion-centro-costos","value")
 )
@@ -29,19 +33,16 @@ def actualizar_datos(unidad_negocio,centro_costos):
 
     unidades_negocio = datos["Unidad de negocio"].unique().to_list()
 
-    #datos_estado_resultado = datos.filter(pl.col("Clasificación1")=="Estado Resultados")
+    datos_estado_resultado, ingreso_operacional,costo_ventas,utilidad = obtencion_estado_resultados(datos)
 
-    #datos_estado_resultado = datos_estado_resultado.select(["Concepto de cuenta","Neto","mes"])
+    figura = grafico_linea_estado_resultados(ingreso_operacional,costo_ventas,utilidad)
 
-    #datos_estado_resultado = datos_estado_resultado.group_by(["Concepto de cuenta","mes"]).agg(pl.col("Neto").sum())
+    cascada = grafico_cascada(datos_estado_resultado)
 
-    #datos_estado_resultado = datos_estado_resultado.pivot("mes",index="Concepto de cuenta", values="Neto")
 
-    #formateamos los valores
-    #datos_estado_resultado = datos_estado_resultado.with_columns([
-    #pl.col(c).map_elements(formatear_valor).alias(c)
-    #for c in datos_estado_resultado.columns if c != "Concepto de cuenta"])
+    #formateamos el valor
+    datos_estado_resultado = datos_estado_resultado.with_columns([
+        pl.col(c).map_elements(formatear_valor).alias(c)
+    for c in datos_estado_resultado.columns if c != "Concepto de cuenta"])
 
-    datos_estado_resultado = obtencion_estado_resultados(datos)
-
-    return datos_estado_resultado.to_dicts(),centros_costos,unidades_negocio
+    return datos_estado_resultado.to_dicts(),centros_costos,unidades_negocio,figura,cascada

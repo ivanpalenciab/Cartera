@@ -10,12 +10,12 @@ import locale
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 from datos.preparacion_finanzas import preparacion_datos_financieros
-from graficos.estado_resultados import grafico_estado_resultados
+from graficos.estado_resultados import grafico_estado_resultados,grafico_linea_estado_resultados
 from utils.funciones_ayuda import obtencion_estado_resultados
 
 datos_crudos = pl.read_excel("datos/Base_datos_finanzas.xlsx",sheet_id=0)
 datos = preparacion_datos_financieros(datos_crudos)
-datos_estado_resultados = obtencion_estado_resultados(datos)
+datos_estado_resultados,ingreso_operacional,costo_ventas, utilidad = obtencion_estado_resultados(datos)
 
 centros_costos = datos["Centro de Costos"].unique().to_list()
 unidad_negocio = datos["Unidad de negocio"].unique().to_list()
@@ -68,5 +68,17 @@ layout = dmc.MantineProvider(
                             grafico_estado_resultados(datos_estado_resultados)
                         ]
                     )
-                ])    
-                ]) )
+                ]),
+                dmc.Grid([
+                     dmc.GridCol(
+                        dcc.Graph(id="grafico-estado-resultados", figure={}),
+                        span=6  # Ocupa la mitad de la fila
+                        ),
+                        dmc.GridCol(
+                            dcc.Graph(id="grafico-cascada-estado-resultados", figure={}),
+                            span=6  # Ocupa la otra mitad
+                    )
+                ],  gutter="xs")    
+                ],
+            fluid=True,  # 👈 ESTA LÍNEA HACE QUE OCUPE TODO EL ANCHO
+            style={"paddingLeft": "2%", "paddingRight": "2%"}) )
