@@ -10,6 +10,8 @@ locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 from datos.preparacion_finanzas import preparacion_datos_financieros
 from graficos.estado_resultados import grafico_estado_resultados
 from utils.funciones_ayuda import obtencion_estado_resultados
+from utils.header import header
+import callbacks.callbacks
 
 datos_crudos = pl.read_excel("datos/Base_datos_finanzas.xlsx",sheet_id=0)
 datos = preparacion_datos_financieros(datos_crudos)
@@ -35,8 +37,10 @@ layout = dmc.MantineProvider(
                     ),
                     html.Img(src="/assets/logo.png", style={"height": "50px"})
                 ], justify="space-between", style={"marginBottom": "20px"}),
+                header(),
 
                 dmc.Grid([
+                   
                     dmc.GridCol(
                     children=[
                     dmc.Text("Elija centro de costos", size="sm", fw=500),
@@ -52,12 +56,10 @@ layout = dmc.MantineProvider(
                     dmc.Text("Elija unidad de negocio", size="sm", fw=500),
                     dcc.Dropdown(
                         options= datos["Unidad de negocio"].unique().to_list(),
-                        id="seleccion-unidad-negocio"),
-                    html.Div(id="resultado-prediccion")
+                        id="seleccion-unidad-negocio")
                     ],span=4,
                     #style={"marginTop": "100px"}
-                    ), 
-                    
+                    ),
                         ]),
                 
                 dmc.Grid([
