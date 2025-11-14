@@ -4,6 +4,7 @@ import dash_mantine_components as dmc
 
 from utils.header import header
 from graficos.tarjeta import tarjeta_kpi
+import callbacks.callbacks_cartera
 
 dash.register_page(__name__, path="/dashboard-cartera", name="Dasboard Cartera")
 

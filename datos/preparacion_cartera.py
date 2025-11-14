@@ -6,7 +6,7 @@ import numpy as np
 
 #inicialmente probaremos asi pero deberan obtenerse mediante frontend
 
-def preparacion_datos_cartera(datos):
+def preparacion_datos_cartera():
 
     hoy = datetime.strptime(datetime.today().strftime("%d/%m/%Y"), "%d/%m/%Y")
     datos = pd.read_excel("/app/datos/Cuentas_por_cobrar_detallada_por_documento.xlsx",header=6)
