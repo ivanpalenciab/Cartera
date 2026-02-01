@@ -14,5 +14,5 @@ def preparacion_datos_cartera():
     datos["vencimiento"] = (datos['Fecha vencimiento'] - hoy)
     datos["estado"] = np.where(datos["vencimiento"].dt.days < 0, "Vencido", "Por vencer")
     datos["vencimiento"] = datos["vencimiento"].dt.days
-    #datos = datos[datos["Total cartera"] >= 0] # sacamos de la cuenta los que tienen saldos a favor
+    datos = datos[datos["Total cartera"] >= 0] # sacamos de la cuenta los que tienen saldos a favor
     return datos
