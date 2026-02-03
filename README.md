@@ -1,2 +1,1 @@
-# Aplicacion_finanzas_fractal
-Esta es un aplicación que me permite visualizar la información financiera de fractal estrategias sostenibles
+Dashboard para visualizar estado de la cartera descargada de siigo
