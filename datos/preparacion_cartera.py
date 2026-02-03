@@ -6,10 +6,10 @@ import numpy as np
 
 #inicialmente probaremos asi pero deberan obtenerse mediante frontend
 
-def preparacion_datos_cartera():
+def preparacion_datos_cartera(ruta):
 
     hoy = datetime.strptime(datetime.today().strftime("%d/%m/%Y"), "%d/%m/%Y")
-    datos = pd.read_excel("/app/datos/Cuentas_por_cobrar_detallada_por_documento.xlsx",header=6)
+    datos = pd.read_excel(ruta,header=6)
     datos['Fecha vencimiento'] = pd.to_datetime(datos['Fecha vencimiento'],format='%d/%m/%Y')
     datos["vencimiento"] = (datos['Fecha vencimiento'] - hoy)
     datos["estado"] = np.where(datos["vencimiento"].dt.days < 0, "Vencido", "Por vencer")

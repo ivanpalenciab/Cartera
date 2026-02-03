@@ -1,4 +1,13 @@
 import polars as pl
+from dash import Dash, dcc, html, Input, Output, State, callback
+
+import base64
+import datetime
+import io
+
+import pandas as pd
+
+from datos.preparacion_cartera import preparacion_datos_cartera
 
 def formatear_valor(val):
     """Convierte 1420874.98 → 1.420.874,98"""
@@ -47,3 +56,17 @@ def obtencion_estado_resultados(datos):
      utilidad = obtener_o_cero(datos_estado_resultado,"Utilidad")
      
      return datos_estado_resultado, ingresos_operacionales,costos_ventas,utilidad 
+
+def parse_contents(contents, filename):
+    content_type, content_string = contents.split(',')
+
+    decoded = base64.b64decode(content_string)
+    if 'csv' in filename:
+        # Assume that the user uploaded a CSV file
+        df = pd.read_csv(
+            io.StringIO(decoded.decode('utf-8')))
+    elif 'xls' in filename:
+        # Assume that the user uploaded an excel file
+        df = preparacion_datos_cartera(io.BytesIO(decoded))
+        #df = pd.read_excel(io.BytesIO(decoded))
+    return df
