@@ -107,7 +107,7 @@ layout = dmc.MantineProvider(
                     ],span=6),
                 dmc.GridCol(
                     children = [
-                        dcc.Graph(id="porcentaje-deuda-duracion",figure={})
+                        dcc.Graph(id="cliente-deuda-duracion",figure={})
                     ],span=6
                 )
             ])

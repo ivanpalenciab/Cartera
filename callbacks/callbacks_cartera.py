@@ -5,7 +5,7 @@ import polars as pl
 from datos.preparacion_cartera import preparacion_datos_cartera
 from utils.funciones_ayuda import formatear_valor
 from utils.funciones_ayuda import parse_contents
-from graficos.cartera import grafico_deuda_cliente,grafico_deuda_cliente_estado,porcentaje_deuda_cliente
+from graficos.cartera import grafico_deuda_cliente,grafico_deuda_cliente_estado,porcentaje_deuda_cliente,deuda_cliente_por_duracion_deuda
 
 @callback(
        Output('output-data-upload', 'children'),
@@ -18,6 +18,7 @@ from graficos.cartera import grafico_deuda_cliente,grafico_deuda_cliente_estado,
         Output("grafico-deuda-cliente","figure"),
         Output("grafico-deuda-cliente-estado","figure"),
         Output("porcentaje-deuda-por-cliente","figure"),
+        Output("cliente-deuda-duracion","figure"),
         Input('upload-data','contents'),
         Input("seleccion-centro-costos-cartera","value"),
         Input("seleccion-cliente","value"),
@@ -33,6 +34,7 @@ def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
             "0",
             "0",
             "0",
+            {},
             {},
             {},
             {}
@@ -84,6 +86,6 @@ def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
         #actualizamos porcentaje de deuda por cliente
         grafico_porcentaje_deuda_cliente = porcentaje_deuda_cliente(datos_cartera)
 
-        #actualizamos p
+        Grafico_deuda_cliente_por_duracion = deuda_cliente_por_duracion_deuda(datos_cartera)
 
-        return nombre_archivo,centros_costos,clientes,total_cartera,cartera_vencida,cartera_al_dia,deuda_critica,barras_deuda_cliente,barras_deuda_cliente_estado,grafico_porcentaje_deuda_cliente
+        return nombre_archivo,centros_costos,clientes,total_cartera,cartera_vencida,cartera_al_dia,deuda_critica,barras_deuda_cliente,barras_deuda_cliente_estado,grafico_porcentaje_deuda_cliente,Grafico_deuda_cliente_por_duracion
