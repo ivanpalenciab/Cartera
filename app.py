@@ -3,6 +3,7 @@ from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import pandas as pd
 import plotly.express as px
 import dash_mantine_components as dmc
+import os 
 
 #import callbacks.callbacks
 
@@ -13,4 +14,5 @@ app.layout = dmc.MantineProvider(dmc.Container([
 ],fluid=True))
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8050, debug=True)
+    port = int(os.environ.get("PORT", 8050))
+    app.run(host="0.0.0.0", port=port, debug=False)
