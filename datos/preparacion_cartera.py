@@ -15,4 +15,13 @@ def preparacion_datos_cartera(ruta):
     datos["estado"] = np.where(datos["vencimiento"].dt.days < 0, "Vencido", "Por vencer")
     datos["vencimiento"] = datos["vencimiento"].dt.days
     datos = datos[datos["Total cartera"] >= 0] # sacamos de la cuenta los que tienen saldos a favor
+    
+    datos["duracion_deuda"] = pd.cut(
+        datos["vencimiento"],
+        bins=[-float('inf'),-180,-90,-1,float('inf')],
+        labels=[
+            "mayor a 6 meses","entre 3 y 6 meses"," menor a 3 meses","al dia"
+        ]
+    )
+
     return datos

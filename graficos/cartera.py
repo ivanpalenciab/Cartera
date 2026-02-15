@@ -1,5 +1,6 @@
 import plotly.express as px
 import pandas as pd
+import dash_ag_grid as dag
 
 def grafico_deuda_cliente(datos):
     datos["Cliente corto"] = datos["Cliente"].str.slice(0, 20) + "..."
@@ -62,7 +63,6 @@ def porcentaje_deuda_cliente(datos):
     deuda_mostrar = pd.concat([top_7, fila_otros], ignore_index=True)
 
     fig = px.pie(deuda_mostrar, values='Total cartera', names='Cliente', title='Porcentaje deuda por cliente')
-    print(deuda_mostrar)
 
     return fig
 
@@ -76,19 +76,6 @@ def deuda_cliente_por_duracion_deuda(datos):
     de la deuda"""
 
     datos["Cliente corto"] = datos["Cliente"].str.slice(0, 20) + "..."
-
-    datos["duracion_deuda"] = pd.cut(
-        datos["vencimiento"],
-        bins=[-float('inf'),-180,-90,-1,float('inf')],
-        labels=[
-            "mayor a 6 meses","entre 3 y 6 meses"," menor a 3 meses","al dia"
-        ]
-    )
-    #datos_agrupado = datos[["Cliente","duracion_deuda","Total cartera"]].groupby(["Cliente","duracion_deuda"]).sum()
-    #datos.to_excel('archivo.xlsx', index=False)
-
-    print("Estos son los datos que quiero revisar")
-    #print(datos[["Cliente",'Fecha vencimiento',"vencimiento","duracion_deuda"]])
     fig = px.bar(
         datos[["Cliente corto","Total cartera","duracion_deuda"]],
         x="Total cartera",
@@ -106,3 +93,11 @@ def deuda_cliente_por_duracion_deuda(datos):
         template="plotly_white"   # aumenta este valor si aún queda apretado
     )
     return fig
+
+def tabla_detalles(datos):
+   datos = datos[["Cliente","Documento","estado","vencimiento","Total cartera"]]
+   tabla = dag.AgGrid(
+        rowData=datos.to_dict('records'),
+        columnDefs=[{"field": i} for i in datos.columns]
+    )
+   return tabla
