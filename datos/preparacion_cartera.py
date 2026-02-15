@@ -12,9 +12,19 @@ def preparacion_datos_cartera(ruta):
     datos = pd.read_excel(ruta,header=6)
     datos['Fecha vencimiento'] = pd.to_datetime(datos['Fecha vencimiento'],format='%d/%m/%Y')
     datos["vencimiento"] = (datos['Fecha vencimiento'] - hoy)
-    datos["estado"] = np.where(datos["vencimiento"].dt.days < 0, "Vencido", "Por vencer")
+    #datos["estado"] = np.where(datos["vencimiento"].dt.days < 0, "Vencido", "Por vencer")
+    
+    #calculamos los estados de las deudas
+    condiciones = [
+    datos["vencimiento"].dt.days < -180,
+    datos["vencimiento"].dt.days < 0]
+    
+    valores = ["Juridica","Vencido"]
+    datos["estado"] = np.select(condiciones, valores, default="Por vencer")
+
     datos["vencimiento"] = datos["vencimiento"].dt.days
-    datos = datos[datos["Total cartera"] >= 0] # sacamos de la cuenta los que tienen saldos a favor
+    
+    #datos = datos[datos["Total cartera"] >= 0] # sacamos de la cuenta los que tienen saldos a favor
     
     datos["duracion_deuda"] = pd.cut(
         datos["vencimiento"],
@@ -23,5 +33,4 @@ def preparacion_datos_cartera(ruta):
             "mayor a 6 meses","entre 3 y 6 meses"," menor a 3 meses","al dia"
         ]
     )
-
     return datos

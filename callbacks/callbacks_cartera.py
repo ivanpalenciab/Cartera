@@ -11,6 +11,7 @@ from graficos.cartera import grafico_deuda_cliente,grafico_deuda_cliente_estado,
        Output('output-data-upload', 'children'),
         Output("seleccion-centro-costos-cartera","options"),
         Output("seleccion-cliente","options"),
+        Output("seleccion-estado-deuda","options"),
         Output("total-cartera","children"),
         Output("deuda-vencida","children"),
         Output("deuda-por-vencer","children"),
@@ -23,12 +24,14 @@ from graficos.cartera import grafico_deuda_cliente,grafico_deuda_cliente_estado,
         Input('upload-data','contents'),
         Input("seleccion-centro-costos-cartera","value"),
         Input("seleccion-cliente","value"),
+        Input("seleccion-estado-deuda","value"),
         State('upload-data', 'filename'),
 )
-def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
+def actualizar_cartera(datos_cargados,centro_costos,cliente,estado_deuda,nombre_archivo):
     if datos_cargados is None:
        return (
            [],
+            [],
             [],
             [],
             "0",
@@ -57,9 +60,12 @@ def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
             datos_cartera = datos_cartera[datos_cartera['Cliente']==cliente]
             print("se esta ejecutando esto")
             detalles_clientes = tabla_detalles(datos_cartera)
+        if estado_deuda:
+            datos_cartera = datos_cartera[datos_cartera["estado"].isin(estado_deuda)]
 
 
         clientes = datos_cartera['Cliente'].unique()
+        duraciones_deuda = datos["estado"].unique()
 
         #actualizamos datos del total de la cartera
         
@@ -77,7 +83,7 @@ def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
         cartera_al_dia = formatear_valor(cartera_al_dia)
 
         #actualizamos datos de la cartera critica, deudas de mas de tres meses
-        datos_deuda_critica = datos_cartera[datos_cartera["vencimiento"]<=-90]
+        datos_deuda_critica = datos_cartera[datos_cartera["vencimiento"]<=-180]
         deuda_critica = datos_deuda_critica["Total cartera"].sum()
         deuda_critica = formatear_valor(deuda_critica)
 
@@ -92,4 +98,4 @@ def actualizar_cartera(datos_cargados,centro_costos,cliente,nombre_archivo):
         
         Grafico_deuda_cliente_por_duracion = deuda_cliente_por_duracion_deuda(datos_cartera)
 
-        return nombre_archivo,centros_costos,clientes,total_cartera,cartera_vencida,cartera_al_dia,deuda_critica,barras_deuda_cliente,barras_deuda_cliente_estado,grafico_porcentaje_deuda_cliente,Grafico_deuda_cliente_por_duracion,detalles_clientes
+        return nombre_archivo,centros_costos,clientes,duraciones_deuda,total_cartera,cartera_vencida,cartera_al_dia,deuda_critica,barras_deuda_cliente,barras_deuda_cliente_estado,grafico_porcentaje_deuda_cliente,Grafico_deuda_cliente_por_duracion,detalles_clientes

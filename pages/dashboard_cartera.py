@@ -69,6 +69,16 @@ layout = dmc.MantineProvider(
                     ],span=4,
                     #style={"marginTop": "100px"}
                     ),
+                    dmc.GridCol(
+                    children=[
+                    dmc.Text("Elija Estado deuda", size="sm", fw=500),
+                    dcc.Dropdown(
+                        options= [],
+                        multi=True,
+                        id="seleccion-estado-deuda")
+                    ],span=4,
+                    #style={"marginTop": "100px"}
+                    )
                        ]),
             dmc.Grid([
                 dmc.GridCol(
