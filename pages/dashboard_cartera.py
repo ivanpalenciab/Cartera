@@ -110,7 +110,11 @@ layout = dmc.MantineProvider(
                         dcc.Graph(id="cliente-deuda-duracion",figure={})
                     ],span=6
                 )
-            ])
+            ]),
+            dmc.Grid(
+                id="tabla-detalles",
+                children=[]
+            )
                          ],
                          fluid=True, 
                         style={"paddingLeft": "2%", "paddingRight": "2%"})
