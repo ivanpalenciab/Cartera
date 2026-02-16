@@ -70,3 +70,13 @@ def parse_contents(contents, filename):
         df = preparacion_datos_cartera(io.BytesIO(decoded))
         #df = pd.read_excel(io.BytesIO(decoded))
     return df
+
+def cargar_notas_desde_store(store_data):
+    """Convierte los datos del store en DataFrame"""
+    if store_data is None or not store_data:
+        return pd.DataFrame(columns=['Centro de costo', 'Cliente', 'Vencido', 'Por vencer', 'Al día', 'Notas'])
+    return pd.DataFrame(store_data)
+
+def guardar_notas_en_store(df_notas):
+    """Convierte el DataFrame a formato para el store"""
+    return df_notas.to_dict('records')
