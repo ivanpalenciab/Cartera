@@ -96,8 +96,23 @@ def deuda_cliente_por_duracion_deuda(datos):
 
 def tabla_detalles(datos):
    datos = datos[["Cliente","Documento","estado","vencimiento","Total cartera"]]
+
+   columnDefs = [
+        {"field": "Cliente"},
+        {"field": "Documento"},
+        {"field": "estado"},
+        {"field": "vencimiento"},
+        {
+            "field": "Total cartera",
+            "type": "rightAligned",
+            "valueFormatter": {
+                "function": "d3.format(',.2f')(params.value)"
+            }
+        },
+    ]
+   
    tabla = dag.AgGrid(
         rowData=datos.to_dict('records'),
-        columnDefs=[{"field": i} for i in datos.columns]
+        columnDefs=columnDefs
     )
    return tabla
