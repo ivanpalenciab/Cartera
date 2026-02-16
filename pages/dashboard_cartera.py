@@ -1,6 +1,7 @@
 import dash
 from dash import dcc,dash_table, Input, Output, State,html
 import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 
 from utils.header import header
 from graficos.tarjeta import tarjeta_kpi
@@ -9,7 +10,8 @@ import callbacks.callbacks_cartera
 dash.register_page(__name__, path="/dashboard-cartera", name="Dasboard Cartera")
 
 
-layout = dmc.MantineProvider(
+layout = dmc.MantineProvider([
+    dcc.Store(id='store-notas-clientes', storage_type='local'),
     dmc.Container([
          dmc.Group([
                     dmc.Text(
@@ -84,21 +86,25 @@ layout = dmc.MantineProvider(
                 dmc.GridCol(
                     children=[
                                 tarjeta_kpi("Total deuda",0,"#323C73","total-cartera")
-                    ],span=3),
+                    ],span=2),
                 dmc.GridCol(
                     children = [
                         tarjeta_kpi("Deuda Vencida",0,"#323C73","deuda-vencida")
-                    ],span=3),
+                    ],span=2),
                 dmc.GridCol(
                     children=[
                         tarjeta_kpi("Deuda por vencer",0,"#323C73","deuda-por-vencer")
-                    ],span=3),
+                    ],span=2),
                 dmc.GridCol(
                     children=[
                         tarjeta_kpi("Deuda critica",0,"#323C73","deuda-critica") #deuda con mas de 90 dias vencidas
-                    ], span=3)
+                    ], span=2),
+                dmc.GridCol(
+                    id="notas-cliente",
+                    children=[], span=4)
 
-            ]),
+            ],gutter="md",  # Añade espaciado entre columnas
+            grow=False),
             dmc.Grid([
                 dmc.GridCol(
                     children = [
@@ -124,9 +130,19 @@ layout = dmc.MantineProvider(
             dmc.Grid(
                 id="tabla-detalles",
                 children=[]
-            )
+            ),
+            dmc.Stack([
+    dmc.Button(
+        "Descargar Notas",
+        id="btn-descargar-notas",
+        leftSection=DashIconify(icon="material-symbols:download"),  # Opcional: icono
+        color="green",
+        variant="filled"
+    ),
+    dcc.Download(id="download-notas")  # ← Componente para la descarga
+])
                          ],
                          fluid=True, 
                         style={"paddingLeft": "2%", "paddingRight": "2%"})
                         
-                        )
+                        ])

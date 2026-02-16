@@ -1,5 +1,6 @@
 dash==3.2.0
 dash-ag-grid
+dash-iconify
 python-dateutil
 seaborn==0.13.2
 matplotlib==3.10.3

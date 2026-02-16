@@ -9,13 +9,13 @@ def tarjeta_kpi(titulo, valor, color="blue",id=None):
         style={
             "textAlign": "center",
             "height": "120px",
-            "width": "200px",             # Tamaño fijo opcional
+            "width": "100%",             # Tamaño fijo opcional
             "backgroundColor":"w",     # Fondo personalizable
             "display": "flex",            # Centrado vertical
             "flexDirection": "column",
-            "justifyContent": "center",
-            "marginLeft": "30px", 
-            "marginRight": "30px"
+            "justifyContent": "center"
+            #"marginLeft": "30px", 
+            #"marginRight": "30px"
         },
         children=[
             dmc.Text(titulo, size="sm", fw=500, c="#323C73"),
